@@ -41,24 +41,8 @@ cc.Class({
     );
   },
 
-  moveToLeft() {
-    this.accLeft = true;
-  },
-
-  moveToRight() {
-    this.accRight = true;
-  },
-
   emitJump() {
     this.accUp = true;
-  },
-
-  cancelToLeft() {
-    this.accLeft = false;
-  },
-
-  cancelToRight() {
-    this.accRight = false;
   },
 
   cancelJump() {
@@ -76,8 +60,6 @@ cc.Class({
     this.node.runAction(this.squashAction);
 
     // 移動方向开关
-    this.accLeft = false;
-    this.accRight = false;
     this.accUp = false;
 
     // 跳躍行為旗標
@@ -89,10 +71,7 @@ cc.Class({
   },
 
   update(dt) {
-    var direction = ([0, -1, 1][this.accLeft + (this.accRight + this.accRight)]) || 0;
-    // 根据当前速度更新主角的位置
-    this.node.x += this.speed * dt * direction;
-
+    this.node.x += this.speed * dt;
     // 偵測邊界
     var selfWidth = this.node.width;
     var leftLimit = -this.node.parent.width / 2 + selfWidth / 2,
