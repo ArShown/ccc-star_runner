@@ -8,11 +8,17 @@ cc.Class({
     ground2: cc.Node,
   },
 
+  setEnabled() {
+    this.enabled = true;
+  },
+
   // LIFE-CYCLE CALLBACKS:
 
   onLoad() {
     // 初始化背景重置的觸發座標
     this.triggerX = -this.bg1.width;
+    // 停止 update 運行
+    this.enabled = false;
   },
 
   setSpeed(value) {

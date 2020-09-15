@@ -53,22 +53,27 @@ cc.Class({
     this.speed = value;
   },
 
+  setEnabled() {
+    this.enabled = true;
+    this.squashAction = this.setSquashAction();
+    this.node.runAction(this.squashAction);
+  },
+
   // LIFE-CYCLE CALLBACKS:
 
   onLoad() {
-    this.squashAction = this.setSquashAction();
-    this.node.runAction(this.squashAction);
+    // 停止 update 運行
+    this.enabled = false;
 
     // 移動方向开关
     this.accUp = false;
 
     // 跳躍行為旗標
     this.isJumping = false;
-  },
-
-  start() {
 
   },
+
+  start() {},
 
   update(dt) {
     this.node.x += this.speed * dt;

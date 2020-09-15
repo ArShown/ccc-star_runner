@@ -12,6 +12,14 @@ cc.Class({
       default: null,
       type: cc.Prefab
     },
+    scoreDisplay: {
+      default: null,
+      type: cc.Label
+    },
+    buttonDisplay: {
+      default: null,
+      type: cc.Button
+    },
     speed: 0
   },
 
@@ -81,7 +89,10 @@ cc.Class({
     var star = newStar.getComponent("star");
     star.setGame(this);
     star.setSpeed(this.speed);
-    star.setDestoryCallback(this.spawnDestroyAnim.bind(this));
+    star.setDestoryCallback(pos => {
+      this.spawnDestroyAnim(pos);
+      this.gainScore();
+    });
     // 将新增的节点添加到 Canvas 节点下面
     this.node.addChild(newStar);
   },
@@ -102,6 +113,21 @@ cc.Class({
     //    window.requestAnimationFrame(this.startToSpawnNewStar);
   },
 
+  gainScore() {
+    this.score += 1;
+    // 更新 scoreDisplay Label 的文字
+    this.scoreDisplay.string = 'Score: ' + this.score;
+  },
+
+  startHandler() {
+    this.playerEle.setEnabled();
+    this.senceEle.setEnabled();
+    // 按鈕消失
+    this.buttonDisplay.target.active = false;
+    // 開始生產星星
+    this.startToSpawnNewStar();
+  },
+
   // LIFE-CYCLE CALLBACKS:
 
   onLoad() {
@@ -113,12 +139,12 @@ cc.Class({
     this.senceEle = this.sence.getComponent("sence");
     this.setSenceSpeed();
 
+    // 初始化計分
+    this.score = 0;
+
     // 移動方向开关
     this.accLeft = false;
     this.accRight = false;
-
-    // 開始生產星星
-    this.startToSpawnNewStar();
 
     // 鍵盤輸入監聽
     cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
