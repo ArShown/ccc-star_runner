@@ -7,7 +7,12 @@ cc.Class({
     // 跳躍持續時間
     jumpDuration: 0,
     // 變形時間
-    squashDuration: 0
+    squashDuration: 0,
+    // 跳跃音效资源
+    jumpAudio: {
+      default: null,
+      type: cc.AudioClip
+    },
   },
 
   // actions
@@ -34,10 +39,15 @@ cc.Class({
     var stretch = cc.scaleTo(this.jumpDuration, 1, 0.8);
     var scaleBack = cc.scaleTo(this.jumpDuration, 1, 1);
 
+    // 音效
+    var audioEffect = cc.callFunc(() => {
+      cc.audioEngine.playEffect(this.jumpAudio, false)
+    }, this)
+
     // cc.spawn 同步动作可以同步执行对一系列子动作，子动作的执行结果会叠加起来修改节点的属性
     return cc.spawn(
       cc.sequence(squash, stretch, scaleBack),
-      cc.sequence(jumpUp, jumpDown, finished)
+      cc.sequence(audioEffect, jumpUp, jumpDown, finished)
     );
   },
 

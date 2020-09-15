@@ -28,6 +28,10 @@ cc.Class({
       default: null,
       type: cc.Node
     },
+    scoreAudio: {
+      default: null,
+      type: cc.AudioClip
+    },
     speed: 0
   },
 
@@ -98,6 +102,7 @@ cc.Class({
     star.setGame(this);
     star.setSpeed(this.speed);
     star.setDestoryCallback(pos => {
+      cc.audioEngine.playEffect(this.scoreAudio, false);
       this.spawnDestroyAnim(pos);
       this.gainScore();
     });
@@ -159,6 +164,7 @@ cc.Class({
 
   overHandler() {
     this.gameOverNode.active = true;
+    this.gameOverNode.zIndex = this.node.childrenCount;
     this.playerEle.setDisabled();
     this.senceEle.setDisabled();
     window.cancelAnimationFrame(this._reqId);
@@ -187,7 +193,7 @@ cc.Class({
     this.accLeft = false;
     this.accRight = false;
 
-    //
+    // 暫存佇列
     this.prefabQueue = [];
 
     // 鍵盤輸入監聽
