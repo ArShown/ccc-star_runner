@@ -8,6 +8,10 @@ cc.Class({
       default: null,
       type: cc.Prefab
     },
+    destroyPrefab: {
+      default: null,
+      type: cc.Prefab
+    },
     speed: 0
   },
 
@@ -64,12 +68,20 @@ cc.Class({
     this.playerEle.setSpeed(this.speed * xSpeed);
   },
 
+  spawnDestroyAnim(pos) {
+    var anim = cc.instantiate(this.destroyPrefab);
+    anim.setPosition(pos);
+    this.node.addChild(anim);
+    anim.getComponent(cc.Animation).play('starFx');
+  },
+
   spawnNewStar() {
     // 使用给定的模板在场景中生成一个新节点
     var newStar = cc.instantiate(this.starPrefab);
     var star = newStar.getComponent("star");
     star.setGame(this);
     star.setSpeed(this.speed);
+    star.setDestoryCallback(this.spawnDestroyAnim.bind(this));
     // 将新增的节点添加到 Canvas 节点下面
     this.node.addChild(newStar);
   },

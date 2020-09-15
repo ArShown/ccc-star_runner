@@ -3,7 +3,7 @@ cc.Class({
 
   properties: {
     // 星星和主角之间的距离小于这个数值时，就会完成收集
-    pickRadius: 0,
+    pickRadius: 0
   },
 
   setGame(game) {
@@ -12,6 +12,10 @@ cc.Class({
 
   setSpeed(value) {
     this.speed = value * 0.5;
+  },
+
+  setDestoryCallback(callback) {
+    this.destroyCallback = callback;
   },
 
   ramdomY() {
@@ -46,6 +50,7 @@ cc.Class({
 
     // 每帧判断和主角之间的距离是否小于收集距离
     if (this.getPlayerDistance() < this.pickRadius) {
+      this.destroyCallback(this.node.getPosition());
       this.node.destroy();
       return;
     }
