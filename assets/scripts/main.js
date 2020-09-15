@@ -4,6 +4,8 @@ cc.Class({
   properties: {
     bg1: cc.Node,
     bg2: cc.Node,
+    ground1: cc.Node,
+    ground2: cc.Node,
     player: cc.Node,
     speed: 0
   },
@@ -80,13 +82,14 @@ cc.Class({
     // 移動方向改變行進速度
     var xSpeed = ([1, 0.8, 1.5][this.accLeft + (this.accRight + this.accRight)]) || 1;
     // 背景移动
-    this.bg1.x -= dt * this.speed * xSpeed;
-    this.bg2.x -= dt * this.speed * xSpeed;
+    this.bg1.x = this.ground1.x -= dt * this.speed * xSpeed;
+    this.bg2.x = this.ground2.x -= dt * this.speed * xSpeed;
 
     // 重置
     if (this.bg1.x <= this.triggerX)
-      this.bg1.x = this.bg2.x + this.bg1.width;
+      this.bg1.x = this.ground1.x = this.bg2.x + this.bg1.width;
     else if (this.bg2.x <= this.triggerX)
-      this.bg2.x = this.bg1.x + this.bg1.width;
+      this.bg2.x = this.ground2.x = this.bg1.x + this.bg1.width;
+
   }
 });
