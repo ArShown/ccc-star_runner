@@ -12,12 +12,18 @@ cc.Class({
     this.enabled = true;
   },
 
+  setDisabled() {
+    // 停止 update 運行
+    this.enabled = false;
+    // 停止所有行為
+    this.node.stopAllActions();
+  },
+
   // LIFE-CYCLE CALLBACKS:
 
   onLoad() {
     // 初始化背景重置的觸發座標
     this.triggerX = -this.bg1.width;
-    // 停止 update 運行
     this.enabled = false;
   },
 

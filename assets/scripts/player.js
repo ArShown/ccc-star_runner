@@ -59,18 +59,22 @@ cc.Class({
     this.node.runAction(this.squashAction);
   },
 
-  // LIFE-CYCLE CALLBACKS:
-
-  onLoad() {
+  setDisabled() {
     // 停止 update 運行
     this.enabled = false;
 
+    // 停止所有行為
+    this.node.stopAllActions();
+  },
+
+  // LIFE-CYCLE CALLBACKS:
+
+  onLoad() {
     // 移動方向开关
     this.accUp = false;
 
     // 跳躍行為旗標
     this.isJumping = false;
-
   },
 
   start() {},
@@ -80,7 +84,7 @@ cc.Class({
     // 偵測邊界
     var selfWidth = this.node.width;
     var leftLimit = -this.node.parent.width / 2 + selfWidth / 2,
-      rightLimit = 0;
+      rightLimit = this.node.parent.width / 2 - selfWidth / 2;
     if (this.node.x > rightLimit)
       this.node.x = rightLimit;
     else if (this.node.x < leftLimit)

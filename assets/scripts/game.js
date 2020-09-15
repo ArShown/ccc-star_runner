@@ -8,6 +8,10 @@ cc.Class({
       default: null,
       type: cc.Prefab
     },
+    boomPrefab: {
+      default: null,
+      type: cc.Prefab
+    },
     destroyPrefab: {
       default: null,
       type: cc.Prefab
@@ -19,6 +23,10 @@ cc.Class({
     buttonDisplay: {
       default: null,
       type: cc.Button
+    },
+    gameOverNode: {
+      default: null,
+      type: cc.Node
     },
     speed: 0
   },
@@ -93,24 +101,45 @@ cc.Class({
       this.spawnDestroyAnim(pos);
       this.gainScore();
     });
-    // 将新增的节点添加到 Canvas 节点下面
-    this.node.addChild(newStar);
+    return newStar;
+  },
+
+  spawnBoom() {
+    var newBoom = cc.instantiate(this.boomPrefab);
+    // getComponent(腳本名稱)
+    var boom = newBoom.getComponent("star");
+    boom.setGame(this);
+    boom.setSpeed(this.speed);
+    boom.setDestoryCallback(pos => {
+      this.overHandler();
+    });
+    return newBoom;
   },
 
   startToSpawnNewStar(timestamp = null) {
     if (this._reqTemp === undefined) {
       this._reqTemp = timestamp;
-      window.requestAnimationFrame(t => this.startToSpawnNewStar(t));
+      this._reqId = window.requestAnimationFrame(t => this.startToSpawnNewStar(t));
       return;
     }
 
     var progress = timestamp - this._reqTemp;
     if (progress >= 1000) {
-      this.spawnNewStar();
+      const newPrefab = [
+        this.spawnNewStar.bind(this),
+        this.spawnNewStar.bind(this),
+        this.spawnNewStar.bind(this),
+        this.spawnNewStar.bind(this),
+        this.spawnBoom.bind(this)
+      ][
+        parseInt(Math.random() * 5)
+      ]();
+      // 将新增的节点添加到 Canvas 节点下面
+      this.node.addChild(newPrefab);
+      this.prefabQueue.push(newPrefab);
       this._reqTemp = timestamp;
     }
-    window.requestAnimationFrame(t => this.startToSpawnNewStar(t));
-    //    window.requestAnimationFrame(this.startToSpawnNewStar);
+    this._reqId = window.requestAnimationFrame(t => this.startToSpawnNewStar(t));
   },
 
   gainScore() {
@@ -128,6 +157,18 @@ cc.Class({
     this.startToSpawnNewStar();
   },
 
+  overHandler() {
+    this.gameOverNode.active = true;
+    this.playerEle.setDisabled();
+    this.senceEle.setDisabled();
+    window.cancelAnimationFrame(this._reqId);
+    this.prefabQueue.forEach(prefab => {
+      if (prefab.isValid)
+        prefab.getComponent("star").setDisabled()
+    });
+    // 一切重新開始
+    // cc.director.loadScene('game');
+  },
   // LIFE-CYCLE CALLBACKS:
 
   onLoad() {
@@ -145,6 +186,9 @@ cc.Class({
     // 移動方向开关
     this.accLeft = false;
     this.accRight = false;
+
+    //
+    this.prefabQueue = [];
 
     // 鍵盤輸入監聽
     cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);

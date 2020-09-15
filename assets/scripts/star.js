@@ -30,6 +30,11 @@ cc.Class({
     return dist;
   },
 
+  setDisabled() {
+    // 停止 update 運行
+    this.enabled = false;
+  },
+
   // LIFE-CYCLE CALLBACKS:
 
   onLoad() {
