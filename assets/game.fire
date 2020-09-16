@@ -826,7 +826,9 @@
     "jumpHeight": 200,
     "jumpDuration": 0.3,
     "squashDuration": 0.3,
-    "jumpAudio": null,
+    "jumpAudio": {
+      "__uuid__": "dc194f1a-c8a5-46ca-aaf9-f03b70974af5"
+    },
     "_id": "75ERdAF9lBw7KOIjLWt59k"
   },
   {
@@ -1348,6 +1350,9 @@
     },
     "scoreAudio": {
       "__uuid__": "55d110b9-bab6-4d9d-9416-03e46904fa35"
+    },
+    "boomAudio": {
+      "__uuid__": "398234ef-5c91-4ec4-93e8-88825de071b3"
     },
     "speed": 500,
     "_id": "3eD1ivaRNN5ZbbPzxrBH9H"
