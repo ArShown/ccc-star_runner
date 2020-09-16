@@ -51,6 +51,10 @@ cc.Class({
     );
   },
 
+  hurtAction() {
+    this.node.runAction(cc.blink(1, 5));
+  },
+
   emitJump() {
     this.accUp = true;
   },

@@ -164,6 +164,7 @@ cc.Class({
   },
 
   minusLife() {
+    this.playerEle.hurtAction();
     this.life -= 1;
     this.lifeDisplay.string = 'Life: ' + this.life;
     if (this.life === 0)
