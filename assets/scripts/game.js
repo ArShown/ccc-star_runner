@@ -20,6 +20,10 @@ cc.Class({
       default: null,
       type: cc.Label
     },
+    lifeDisplay: {
+      default: null,
+      type: cc.Label
+    },
     buttonDisplay: {
       default: null,
       type: cc.Button
@@ -29,6 +33,10 @@ cc.Class({
       type: cc.Node
     },
     scoreAudio: {
+      default: null,
+      type: cc.AudioClip
+    },
+    boomAudio: {
       default: null,
       type: cc.AudioClip
     },
@@ -116,7 +124,9 @@ cc.Class({
     boom.setGame(this);
     boom.setSpeed(this.speed);
     boom.setDestoryCallback(pos => {
-      this.overHandler();
+      cc.audioEngine.playEffect(this.boomAudio, false);
+      this.spawnDestroyAnim(pos);
+      this.minusLife();
     });
     return newBoom;
   },
@@ -151,6 +161,13 @@ cc.Class({
     this.score += 1;
     // 更新 scoreDisplay Label 的文字
     this.scoreDisplay.string = 'Score: ' + this.score;
+  },
+
+  minusLife() {
+    this.life -= 1;
+    this.lifeDisplay.string = 'Life: ' + this.life;
+    if (this.life === 0)
+      this.overHandler();
   },
 
   startHandler() {
@@ -188,6 +205,9 @@ cc.Class({
 
     // 初始化計分
     this.score = 0;
+
+    // 初始化生命
+    this.life = 3;
 
     // 移動方向开关
     this.accLeft = false;
